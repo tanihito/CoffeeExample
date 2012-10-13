@@ -133,3 +133,24 @@
       _this
 
 ) jQuery
+
+$ ->
+  t = $("#test").bootstrapTransfer()
+  t.populate [
+    value: "1"
+    content: "Apple"
+  ,
+    value: "2"
+    content: "Orange"
+  ,
+    value: "3"
+    content: "Banana"
+  ,
+    value: "4"
+    content: "Peach"
+  ,
+    value: "5"
+    content: "Grapes"
+  ]
+  t.set_values ["2", "4"]
+  console.log t.get_values()
