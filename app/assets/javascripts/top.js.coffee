@@ -121,12 +121,22 @@
 # ) jQuery
 
 
+class CsvField
+  constructor: (@field_name, @is_target) ->
 
 class CsvFieldSelector
-  constructor: (@remaining_fields, @target_fields) ->
+  $container: null
+  $remaining_list: null
+  $target_list: null
 
-  move: (fields, is_target) ->
-    console.log(is_target)
+  constructor: (@remaining_fields, @target_fields) ->
+    @$container      = $(".bootstrap-transfer-container")
+    @$remaining_list = @$container.find("select.remaining")
+    @$target_list    = @$container.find("select.target")
+
+  move: (field_index, is_target) ->
+
+    @update()
 
   move_all: (is_target) ->
     all_fields = []
@@ -141,19 +151,20 @@ class CsvFieldSelector
     @update()
 
   update: () ->
-    $(".bootstrap-transfer-container").find("select.remaining").empty()
+    @$remaining_list.empty()
     for remaining_field in @remaining_fields
       selected = ""
-      $(".bootstrap-transfer-container").find("select.remaining").append "<option " + selected + ">" + remaining_field + "</option>"
+      @$remaining_list.append "<option " + selected + ">" + remaining_field + "</option>"
 
-    $(".bootstrap-transfer-container").find("select.target").empty()
+    @$target_list.empty()
     for target_field in @target_fields
       selected = ""
-      $(".bootstrap-transfer-container").find("select.target").append "<option " + selected + ">" + target_field + "</option>"
+      @$target_list.append "<option " + selected + ">" + target_field + "</option>"
 
 $ ->
-  remaining_fields = ["1", "2"]
-  target_fields    = ["3", "4", "5"]
+  remaining_fields = ["a", "b"]
+  target_fields    = ["c", "d", "e"]
   field_selector = new CsvFieldSelector(remaining_fields, target_fields)
   field_selector.update()
   field_selector.move_all(true)
+  field_selector.move(1, true)
