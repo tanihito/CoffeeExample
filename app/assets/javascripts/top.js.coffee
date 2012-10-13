@@ -1,8 +1,7 @@
 
 
 (($) ->
-  $.fn.bootstrapTransfer = (options) ->
-    settings = $.extend({}, $.fn.bootstrapTransfer.defaults, options)
+  $.fn.bootstrapTransfer = () ->
     _this = undefined
 
     # #===============================================================================
@@ -35,18 +34,6 @@
       _this.$clear_all_btn = _this.find(".selector-clearall")
       _this._remaining_list = []
       _this._target_list = []
-
-      # #===============================================================================
-
-      # # Apply settings
-
-      # #===============================================================================
-
-      # target_id
-      _this.$target_select.attr "id", settings.target_id  unless settings.target_id is ""
-
-      # height
-      _this.find("select.filtered").css "height", settings.height
 
       # #===============================================================================
 
@@ -123,7 +110,7 @@
             e = lists[i][j]
             if e[1]
               selected = ""
-              selected = "selected=\"selected\""  if not force_hilite_off and settings.hilite_selection and not old[i].hasOwnProperty(e[0].value)
+              selected = "selected=\"selected\""  if not force_hilite_off and not old[i].hasOwnProperty(e[0].value)
               source[i].append "<option " + selected + "value=" + e[0].value + ">" + e[0].content + "</option>"
 
       _this.move_elems = (values, b1, b2) ->
