@@ -15,7 +15,7 @@
       _this.get_values()
 
     @each ->
-      _this = $(".bootstrap-transfer-container")
+      _this = $(this);
 
       # #===============================================================================
       # # Initialize internal variables
@@ -87,8 +87,6 @@
         res
 
       _this.update_lists = (force_hilite_off) ->
-        old = undefined
-        old = [_this.to_dict(_this.get_internal(_this.$remaining_select)), _this.to_dict(_this.get_internal(_this.$target_select))]  unless force_hilite_off
         _this.$remaining_select.empty()
         _this.$target_select.empty()
         lists = [_this._remaining_list, _this._target_list]
@@ -98,7 +96,7 @@
             e = lists[i][j]
             if e[1]
               selected = ""
-              selected = "selected=\"selected\""  if not force_hilite_off and not old[i].hasOwnProperty(e[0].value)
+              selected = "selected=\"selected\""  if not force_hilite_off
               source[i].append "<option " + selected + "value=" + e[0].value + ">" + e[0].content + "</option>"
 
       _this.move_elems = (values, b1, b2) ->
@@ -123,7 +121,6 @@
 ) jQuery
 
 $ ->
-
   t = $("#test").bootstrapTransfer()
   t.populate [
     value: "1"
