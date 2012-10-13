@@ -20,7 +20,7 @@
       _this.get_values()
 
     @each ->
-      _this = $(this)
+      _this = $(".bootstrap-transfer-container")
 
       # #===============================================================================
 
