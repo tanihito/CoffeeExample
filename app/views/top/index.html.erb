@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap Transfer Demo</title>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/bootstrap-transfer.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <h1>Bootstrap Transfer Multiselect Demo</h1>
+    <div id="test" style="width:400px" class="bootstrap-transfer-container">
+      <table width="100%" cellspacing="0" cellpadding="0"><tbody>
+        <tr>
+          <td width="50%"><div class="selector-available">
+            <h2>Available</h2>
+            <select multiple="multiple" class="filtered remaining" style="height: 15em; ">
+              <option value="1">Apple</option>
+              <option value="2">Orange</option>
+              <option value="3">Banana</option>
+              <option value="4">Peach</option>
+              <option value="5">Grapes</option>
+            </select>
+            <a href="#" class="selector-chooseall">Choose all</a>
+          </div></td>
+          <td><div class="selector-chooser">
+            <a href="#" class="selector-add">add</a>
+            <a href="#" class="selector-remove">rem</a>
+          </div></td>
+          <td width="50%"><div class="selector-chosen">
+            <h2>Chosen</h2>
+            <select multiple="multiple" class="filtered target" id="multi-select-input" style="height: 15em; "></select>
+            <a href="#" class="selector-clearall">Clear all</a>
+          </div></td>
+        </tr>
+      </tbody></table>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transfer.js"></script>
+    <script>
+    $(function() {
+      var t = $('#test').bootstrapTransfer(
+        {'target_id': 'multi-select-input',
+         'height': '15em',
+         'hilite_selection': true});
+
+      t.populate([
+        {value:"1", content:"Apple"},
+        {value:"2", content:"Orange"},
+        {value:"3", content:"Banana"},
+        {value:"4", content:"Peach"},
+        {value:"5", content:"Grapes"}
+      ]);
+      t.set_values(["2", "4"]);
+      console.log(t.get_values());
+    });
+    </script>
+  </body>
+</html>
+
+
