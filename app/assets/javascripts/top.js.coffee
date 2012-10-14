@@ -26,8 +26,8 @@
 #       _this.$remove_btn = _this.find(".selector-remove")
 #       _this.$choose_all_btn = _this.find(".selector-chooseall")
 #       _this.$clear_all_btn = _this.find(".selector-clearall")
-#       _this._remaining_list = []
-#       _this._target_list = []
+#       _this._available_list = []
+#       _this._chosen_list = []
 
 #       # #===============================================================================
 #       # # Wire internal events
@@ -53,11 +53,11 @@
 #         # input: [{value:_, content:_}]
 #         for i of input
 #           e = input[i]
-#           _this._remaining_list.push [
+#           _this._available_list.push [
 #             value: e.value
 #             content: e.content
 #           , true]
-#           _this._target_list.push [
+#           _this._chosen_list.push [
 #             value: e.value
 #             content: e.content
 #           , false]
@@ -89,7 +89,7 @@
 #       _this.update_lists = (force_hilite_off) ->
 #         _this.$remaining_select.empty()
 #         _this.$target_select.empty()
-#         lists = [_this._remaining_list, _this._target_list]
+#         lists = [_this._available_list, _this._chosen_list]
 #         source = [_this.$remaining_select, _this.$target_select]
 #         for i of lists
 #           for j of lists[i]
@@ -102,17 +102,17 @@
 #       _this.move_elems = (values, b1, b2) ->
 #         for i of values
 #           val = values[i]
-#           for j of _this._remaining_list
-#             e = _this._remaining_list[j]
+#           for j of _this._available_list
+#             e = _this._available_list[j]
 #             if e[0].value is val
 #               e[1] = b1
-#               _this._target_list[j][1] = b2
+#               _this._chosen_list[j][1] = b2
 #         _this.update_lists false
 
 #       _this.move_all = (b1, b2) ->
-#         for i of _this._remaining_list
-#           _this._remaining_list[i][1] = b1
-#           _this._target_list[i][1] = b2
+#         for i of _this._available_list
+#           _this._available_list[i][1] = b1
+#           _this._chosen_list[i][1] = b2
 #         _this.update_lists false
 
 #       _this.data "bootstrapTransfer", _this
@@ -121,50 +121,35 @@
 # ) jQuery
 
 
-class CsvField
-  constructor: (@field_name, @is_target) ->
-
 class CsvFieldSelector
   $container: null
-  $remaining_list: null
-  $target_list: null
+  $available_list: null
+  $chosen_list: null
+  $add_btn: null
+  $remove_btn: null
+  $choose_all_btn: null
+  $clear_all_btn: null
 
-  constructor: (@remaining_fields, @target_fields) ->
+  constructor: () ->
     @$container      = $(".bootstrap-transfer-container")
-    @$remaining_list = @$container.find("select.remaining")
-    @$target_list    = @$container.find("select.target")
+    @$available_list = @$container.find("select.remaining")
+    @$chosen_list    = @$container.find("select.target")
+    @$add_btn        = @$container.find(".selector-add")
+    @$remove_btn     = @$container.find(".selector-remove")
+    @$choose_all_btn = @$container.find(".selector-chooseall")
+    @$clear_all_btn  = @$container.find(".selector-clearall")
 
-  move: (field_index, is_target) ->
+  choose_fields: () ->
+    @$container.find("select.remaining option:selected").each(@choose_field)
 
-    @update()
+  choose_field: () ->
+    $(".bootstrap-transfer-container").find("select.target").append($(this))
 
-  move_all: (is_target) ->
-    all_fields = []
-    all_fields.push(field) for field in @remaining_fields
-    all_fields.push(field) for field in @target_fields
-    if is_target
-      @remaining_fields = []
-      @target_fields    = all_fields
-    else
-      @remaining_fields = all_fields
-      @target_fields    = []
-    @update()
-
-  update: () ->
-    @$remaining_list.empty()
-    for remaining_field in @remaining_fields
-      selected = ""
-      @$remaining_list.append "<option " + selected + ">" + remaining_field + "</option>"
-
-    @$target_list.empty()
-    for target_field in @target_fields
-      selected = ""
-      @$target_list.append "<option " + selected + ">" + target_field + "</option>"
+  wire_events: () ->
+    @$add_btn.click =>
+      @choose_fields()
 
 $ ->
-  remaining_fields = ["a", "b"]
-  target_fields    = ["c", "d", "e"]
-  field_selector = new CsvFieldSelector(remaining_fields, target_fields)
-  field_selector.update()
-  field_selector.move_all(true)
-  field_selector.move(1, true)
+  field_selector = new CsvFieldSelector()
+  field_selector.wire_events()
+  field_selector.choose_fields()
