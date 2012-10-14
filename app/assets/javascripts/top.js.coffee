@@ -122,14 +122,6 @@
 
 
 class CsvFieldSelector
-  $container: null
-  $available_list: null
-  $chosen_list: null
-  $add_btn: null
-  $remove_btn: null
-  $choose_all_btn: null
-  $clear_all_btn: null
-
   constructor: () ->
     @$container      = $(".bootstrap-transfer-container")
     @$available_list = @$container.find("select.remaining")
@@ -138,18 +130,47 @@ class CsvFieldSelector
     @$remove_btn     = @$container.find(".selector-remove")
     @$choose_all_btn = @$container.find(".selector-chooseall")
     @$clear_all_btn  = @$container.find(".selector-clearall")
+    @$up_btn         = @$container.find(".selector-up")
+    @$down_btn       = @$container.find(".selector-down")
 
-  choose_fields: () ->
-    @$container.find("select.remaining option:selected").each(@choose_field)
+  add: () ->
+    @$container.find("select.remaining option:selected").each ->
+      $(".bootstrap-transfer-container").find("select.target").append($(@))
 
-  choose_field: () ->
-    $(".bootstrap-transfer-container").find("select.target").append($(this))
+  add_all: () ->
+    @$container.find("select.remaining option").each ->
+      $(".bootstrap-transfer-container").find("select.target").append($(@))
+
+  remove: () ->
+    @$container.find("select.target option:selected").each ->
+      $(".bootstrap-transfer-container").find("select.remaining").append($(@))
+
+  remove_all: () ->
+    @$container.find("select.target option").each ->
+      $(".bootstrap-transfer-container").find("select.remaining").append($(@))
+
+  up: () ->
+    @$container.find("select.target option:selected").each ->
+      $(@).prev().before($(@));
+
+  down: () ->
+    @$container.find("select.target option:selected").each ->
+      $(@).next().after($(@));
 
   wire_events: () ->
     @$add_btn.click =>
-      @choose_fields()
+      @add()
+    @$remove_btn.click =>
+      @remove()
+    @$choose_all_btn.click =>
+      @add_all()
+    @$clear_all_btn.click =>
+      @remove_all()
+    @$up_btn.click =>
+      @up()
+    @$down_btn.click =>
+      @down()
 
 $ ->
   field_selector = new CsvFieldSelector()
   field_selector.wire_events()
-  field_selector.choose_fields()
